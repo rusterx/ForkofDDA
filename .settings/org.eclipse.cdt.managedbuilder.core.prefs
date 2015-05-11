@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/CPATH/delimiter=;
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/CPATH/operation=remove
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/C_INCLUDE_PATH/delimiter=;
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/C_INCLUDE_PATH/operation=replace
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/C_INCLUDE_PATH/value=C\:\\mingw64\\include;C\:\\mingw64\\lib\\gcc\\mingw32\\4.7.3\\include
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/append=true
+environment/buildEnvironmentInclude/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/appendContributed=true
+environment/buildEnvironmentLibrary/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/LIBRARY_PATH/delimiter=;
+environment/buildEnvironmentLibrary/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/LIBRARY_PATH/operation=replace
+environment/buildEnvironmentLibrary/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/LIBRARY_PATH/value=C\:\\mingw64\\lib;C\:\\mingw64\\lib\\gcc\\mingw32\\4.7.3
+environment/buildEnvironmentLibrary/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/append=true
+environment/buildEnvironmentLibrary/photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222/appendContributed=true

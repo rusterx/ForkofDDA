@@ -304,6 +304,11 @@ DDPOSTPROCESS.o: DDPOSTPROCESS.f90 ddprecision.mod readnf_bcom.mod \
 	$(FC) -c $(FFLAGS) $(OPENMP) DDPOSTPROCESS.f90 \
 	-o DDPOSTPROCESS.o
 
+DDP.o: DDP.f90 ddprecision.mod readnf_bcom.mod \
+	readnf_ecom.mod vtr.mod
+	$(FC) -c $(FFLAGS) $(OPENMP) DDP.f90 \
+	-o DDP.o
+
 bself.o: bself.f90 ddprecision.mod
 	cpp -P -traditional-cpp $(DOMP) bself.f90 bself_cpp.f90
 	$(FC) -c $(FFLAGS) $(OPENMP) bself_cpp.f90 -o bself.o
@@ -461,6 +466,7 @@ OBJS2 = CALLTARGET.o\
 # dependencies for ddpostprocess:
 
 OBJS3 =	DDPOSTPROCESS.o\
+	DDP.o\
 	readnf_bcom.o\
 	readnf_ecom.o\
 	readnf.o\
@@ -471,7 +477,7 @@ OBJS3 =	DDPOSTPROCESS.o\
 OBJS4 = VTRCONVERT.o\
 	vtr.o
 
-all:	ddscat calltarget ddpostprocess vtrconvert
+all:	ddscat calltarget ddpostprocess ddp vtrconvert
 
 ddscat:	ddprecision.mod ddcommon_1.mod $(MKLM) $(OBJS)
 	@echo 'LOADEDMODULES='$(LOADEDMODULES)
@@ -494,6 +500,11 @@ calltarget: ddprecision.mod ddcommon_1.mod $(OBJS2)
 ddpostprocess: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
 	$(FC) -o ddpostprocess \
 	$(OBJS3) $(LFLAGS) 
+
+# customized
+ddp: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
+	$(FC) -o ddp \
+	$(OBJS3) $(LFLAGS)
 
 vtrconvert: ddprecision.mod vtr.o $(OBJS4)
 	$(FC) -o vtrconvert \
@@ -530,4 +541,4 @@ vtr.mod: vtr.f90
 clean:;	rm -f *.o make.out*  *.mod
 
 veryclean: clean
-	rm -f calltarget ddscat ddpostprocess
+	rm -f calltarget ddscat ddpostprocess ddp
