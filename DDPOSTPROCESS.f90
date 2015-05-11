@@ -29,15 +29,15 @@
 
       INTEGER ::                                                        &
          IDVOUT,ILINE,IOBIN,IVTR,IX1,IX2,IY1,IY2,IZ1,IZ2,               &
-         JA,JX,JY,JZ,K,                                                 &
-         NAB,NAT0,NAT3,NCOMP,NRFLDB,NRWORD,NRWORD_NF,NX,NXY,NXYZ,NY,NZ, &
+         JA,JB,JC,JX,JY,JZ,K,                                                 &
+         NAA,NAB,NAC,NAT0,NAT3,NCOMP,NRFLDB,NRWORD,NRWORD_NF,NX,NXY,NXYZ,NY,NZ, &
          VERSNUM                                                        !
 
       REAL(WP) ::                                           &
          AEFF,DPHYS,E2,EINC2,                               &
          NAMBIENT,PI,SNORM,SUMERR2,TINY,                    &
          W1,W2,W3,W4,W5,W6,W7,W8,WAVE,WX,WY,WZ,             &
-         XA,XB,XMAX,XMIN,YA,YB,YMAX,YMIN,ZA,ZB,ZETA,ZMAX,ZMIN
+         XA,XB,XMAX,XMIN,YA,YB,YMAX,YMIN,ZA,ZB,ZETA,ZETB,ZETC,ZMAX,ZMIN
 
       REAL(WP) ::    &
          AK_TF(1:3), &
@@ -292,7 +292,7 @@
 
          OPEN(UNIT=7,FILE='ddpostprocess.out')
 
- 3000    READ(3,*,END=4000)XA,YA,ZA,XB,YB,ZB,NAB
+ 3000    READ(3,*,END=4000)XA,YA,ZA,XB,YB,ZB,NAA,NAB,NAC
 
 ! check that track is entirely within computational volume
 
@@ -342,115 +342,121 @@
                   'Re(B_y)','Im(B_y)','Re(B_z)','Im(B_z)',            &
                   '-- <(Sx,Sy,Sz)>/|<S_inc>| --'                      !
             ENDIF
+            DO JA=1,NAA
+                DO JB=1,NAB
+                    DO JC=1,NAC
+                       ZETA=REAL(JA-1)/REAL(NAA)
+                       ZETB=REAL(JB-1)/REAL(NAB)
+                       ZETC=REAL(JC-1)/REAL(NAC)
+                       XTF(1)=XA+(XB-XA)*ZETA
+                       XTF(2)=YA+(YB-YA)*ZETB
+                       XTF(3)=ZA+(ZB-ZA)*ZETC
 
-            DO JA=0,NAB
-               ZETA=REAL(JA)/REAL(NAB)
-               XTF(1)=XA+(XB-XA)*ZETA
-               XTF(2)=YA+(YB-YA)*ZETA
-               XTF(3)=ZA+(ZB-ZA)*ZETA
-          
 ! XTF is assumed to be in physical units
 ! XTF/DPHYS is in dipole units
 ! I + X0 = XTF/DPHYS
 ! I = XTF/DPHYS - X0
 
-               IX1=INT(XTF(1)/DPHYS-X0(1))
-               IY1=INT(XTF(2)/DPHYS-X0(2))
-               IZ1=INT(XTF(3)/DPHYS-X0(3))
-               IF(IX1.LT.1)IX1=1
-               IF(IX1.GE.NX)IX1=NX-1
-               IF(IY1.LT.1)IY1=1
-               IF(IY1.GE.NY)IY1=NY-1
-               IF(IZ1.LT.1)IZ1=1
-               IF(IZ1.GE.NZ)IZ1=NZ-1
-               IX2=IX1+1
-               IY2=IY1+1
-               IZ2=IZ1+1
-               WX=XTF(1)/DPHYS-X0(1)-IX1
-               WY=XTF(2)/DPHYS-X0(2)-IY1
-               WZ=XTF(3)/DPHYS-X0(3)-IZ1
-! ------------ determine weights ---------- xyz zyx
-               W1=(1.-WX)*(1.-WY)*(1.-WZ) ! 000 000
-               W2=WX*(1.-WY)*(1.-WZ)      ! 100 001
-               W3=(1.-WX)*WY*(1.-WZ)      ! 010 010
-               W4=WX*WY*(1.-WZ)           ! 110 011
-               W5=(1.-WX)*(1.-WY)*WZ      ! 001 100
-               W6=WX*(1.-WY)*WZ           ! 101 101
-               W7=(1.-WX)*WY*WZ           ! 011 110
-               W8=WX*WY*WZ                ! 111 111
-! -------- evaluate weighted averages -----------------------------------
-               DO K=1,3
-                  CXE_INC(K)=W1*CXEINC(IX1,IY1,IZ1,K)+ &
-                             W2*CXEINC(IX2,IY1,IZ1,K)+ &
-                             W3*CXEINC(IX1,IY2,IZ1,K)+ &
-                             W4*CXEINC(IX2,IY2,IZ1,K)+ &
-                             W5*CXEINC(IX1,IY1,IZ2,K)+ &
-                             W6*CXEINC(IX2,IY1,IZ2,K)+ &
-                             W7*CXEINC(IX1,IY2,IZ2,K)+ &
-                             W8*CXEINC(IX2,IY2,IZ2,K)  !
+                       IX1=INT(XTF(1)/DPHYS-X0(1))
+                       IY1=INT(XTF(2)/DPHYS-X0(2))
+                       IZ1=INT(XTF(3)/DPHYS-X0(3))
+                       IF(IX1.LT.1)IX1=1
+                       IF(IX1.GE.NX)IX1=NX-1
+                       IF(IY1.LT.1)IY1=1
+                       IF(IY1.GE.NY)IY1=NY-1
+                       IF(IZ1.LT.1)IZ1=1
+                       IF(IZ1.GE.NZ)IZ1=NZ-1
+                       IX2=IX1+1
+                       IY2=IY1+1
+                       IZ2=IZ1+1
+                       WX=XTF(1)/DPHYS-X0(1)-IX1
+                       WY=XTF(2)/DPHYS-X0(2)-IY1
+                       WZ=XTF(3)/DPHYS-X0(3)-IZ1
+        ! why must have to multiply by weights, and field writed into vtr file don't multiply weight
+        ! ------------ determine weights ---------- xyz zyx
+                       W1=(1.-WX)*(1.-WY)*(1.-WZ) ! 000 000
+                       W2=WX*(1.-WY)*(1.-WZ)      ! 100 001
+                       W3=(1.-WX)*WY*(1.-WZ)      ! 010 010
+                       W4=WX*WY*(1.-WZ)           ! 110 011
+                       W5=(1.-WX)*(1.-WY)*WZ      ! 001 100
+                       W6=WX*(1.-WY)*WZ           ! 101 101
+                       W7=(1.-WX)*WY*WZ           ! 011 110
+                       W8=WX*WY*WZ                ! 111 111
+        ! -------- evaluate weighted averages -----------------------------------
+                       DO K=1,3
+                          CXE_INC(K)=W1*CXEINC(IX1,IY1,IZ1,K)+ &
+                                     W2*CXEINC(IX2,IY1,IZ1,K)+ &
+                                     W3*CXEINC(IX1,IY2,IZ1,K)+ &
+                                     W4*CXEINC(IX2,IY2,IZ1,K)+ &
+                                     W5*CXEINC(IX1,IY1,IZ2,K)+ &
+                                     W6*CXEINC(IX2,IY1,IZ2,K)+ &
+                                     W7*CXEINC(IX1,IY2,IZ2,K)+ &
+                                     W8*CXEINC(IX2,IY2,IZ2,K)  !
 
-                  CXE_SCA(K)=W1*CXESCA(IX1,IY1,IZ1,K)+ &
-                             W2*CXESCA(IX2,IY1,IZ1,K)+ &
-                             W3*CXESCA(IX1,IY2,IZ1,K)+ &
-                             W4*CXESCA(IX2,IY2,IZ1,K)+ &
-                             W5*CXESCA(IX1,IY1,IZ2,K)+ &
-                             W6*CXESCA(IX2,IY1,IZ2,K)+ &
-                             W7*CXESCA(IX1,IY2,IZ2,K)+ &
-                             W8*CXESCA(IX2,IY2,IZ2,K)  !
+                          CXE_SCA(K)=W1*CXESCA(IX1,IY1,IZ1,K)+ &
+                                     W2*CXESCA(IX2,IY1,IZ1,K)+ &
+                                     W3*CXESCA(IX1,IY2,IZ1,K)+ &
+                                     W4*CXESCA(IX2,IY2,IZ1,K)+ &
+                                     W5*CXESCA(IX1,IY1,IZ2,K)+ &
+                                     W6*CXESCA(IX2,IY1,IZ2,K)+ &
+                                     W7*CXESCA(IX1,IY2,IZ2,K)+ &
+                                     W8*CXESCA(IX2,IY2,IZ2,K)  !
 
-                  CXP(K)=W1*CXPOL(IX1,IY1,IZ1,K)+W2*CXPOL(IX2,IY1,IZ1,K)+ &
-                         W3*CXPOL(IX1,IY2,IZ1,K)+W4*CXPOL(IX2,IY2,IZ1,K)+ &
-                         W5*CXPOL(IX1,IY1,IZ2,K)+W6*CXPOL(IX2,IY1,IZ2,K)+ &
-                         W7*CXPOL(IX1,IY2,IZ2,K)+W8*CXPOL(IX2,IY2,IZ2,K)
+                          CXP(K)=W1*CXPOL(IX1,IY1,IZ1,K)+W2*CXPOL(IX2,IY1,IZ1,K)+ &
+                                 W3*CXPOL(IX1,IY2,IZ1,K)+W4*CXPOL(IX2,IY2,IZ1,K)+ &
+                                 W5*CXPOL(IX1,IY1,IZ2,K)+W6*CXPOL(IX2,IY1,IZ2,K)+ &
+                                 W7*CXPOL(IX1,IY2,IZ2,K)+W8*CXPOL(IX2,IY2,IZ2,K)
 
-                  CXE(K)=CXE_INC(K)+CXE_SCA(K)
-               ENDDO
+                          CXE(K)=CXE_INC(K)+CXE_SCA(K)
+                       ENDDO
 
-               IF(NRFLDB==0)THEN
+                       IF(NRFLDB==0)THEN
 
-! write out total macroscopic E field at point on track
-  
-                  WRITE(7,FMT='(1PE10.3,1P2E11.3,0P6F10.5)')XTF,CXE
+        ! write out total macroscopic E field at point on track
 
-               ELSEIF(NRFLDB==1)THEN
-                  DO K=1,3
-                     CXB_INC(K)=W1*CXBINC(IX1,IY1,IZ1,K)+ &
-                                W2*CXBINC(IX2,IY1,IZ1,K)+ &
-                                W3*CXBINC(IX1,IY2,IZ1,K)+ &
-                                W4*CXBINC(IX2,IY2,IZ1,K)+ &
-                                W5*CXBINC(IX1,IY1,IZ2,K)+ &
-                                W6*CXBINC(IX2,IY1,IZ2,K)+ &
-                                W7*CXBINC(IX1,IY2,IZ2,K)+ &
-                                W8*CXBINC(IX2,IY2,IZ2,K)  !
-                     CXB_SCA(K)=W1*CXBSCA(IX1,IY1,IZ1,K)+ &
-                                W2*CXBSCA(IX2,IY1,IZ1,K)+ &
-                                W3*CXBSCA(IX1,IY2,IZ1,K)+ &
-                                W4*CXBSCA(IX2,IY2,IZ1,K)+ &
-                                W5*CXBSCA(IX1,IY1,IZ2,K)+ &
-                                W6*CXBSCA(IX2,IY1,IZ2,K)+ &
-                                W7*CXBSCA(IX1,IY2,IZ2,K)+ &
-                                W8*CXBSCA(IX2,IY2,IZ2,K)  !
-                     CXB(K)=CXB_INC(K)+CXB_SCA(K)
+                          WRITE(7,FMT='(1PE10.3,1P2E11.3,0P6F10.5)')XTF,CXE
+
+                       ELSEIF(NRFLDB==1)THEN
+                          DO K=1,3
+                             CXB_INC(K)=W1*CXBINC(IX1,IY1,IZ1,K)+ &
+                                        W2*CXBINC(IX2,IY1,IZ1,K)+ &
+                                        W3*CXBINC(IX1,IY2,IZ1,K)+ &
+                                        W4*CXBINC(IX2,IY2,IZ1,K)+ &
+                                        W5*CXBINC(IX1,IY1,IZ2,K)+ &
+                                        W6*CXBINC(IX2,IY1,IZ2,K)+ &
+                                        W7*CXBINC(IX1,IY2,IZ2,K)+ &
+                                        W8*CXBINC(IX2,IY2,IZ2,K)  !
+                             CXB_SCA(K)=W1*CXBSCA(IX1,IY1,IZ1,K)+ &
+                                        W2*CXBSCA(IX2,IY1,IZ1,K)+ &
+                                        W3*CXBSCA(IX1,IY2,IZ1,K)+ &
+                                        W4*CXBSCA(IX2,IY2,IZ1,K)+ &
+                                        W5*CXBSCA(IX1,IY1,IZ2,K)+ &
+                                        W6*CXBSCA(IX2,IY1,IZ2,K)+ &
+                                        W7*CXBSCA(IX1,IY2,IZ2,K)+ &
+                                        W8*CXBSCA(IX2,IY2,IZ2,K)  !
+                             CXB(K)=CXB_INC(K)+CXB_SCA(K)
 
 ! calculate time-averaged Poynting vector at each point, normalized by
 ! magnitude of time-averaged Poynting vector of incident plane wave
 
-                     SVEC(K)=W1*S(IX1,IY1,IZ1,K)+ &
-                             W2*S(IX2,IY1,IZ1,K)+ &
-                             W3*S(IX1,IY2,IZ1,K)+ &
-                             W4*S(IX2,IY2,IZ1,K)+ &
-                             W5*S(IX1,IY1,IZ2,K)+ &
-                             W6*S(IX2,IY1,IZ2,K)+ &
-                             W7*S(IX1,IY2,IZ2,K)+ &
-                             W8*S(IX2,IY2,IZ2,K)  !
-                  ENDDO
+                             SVEC(K)=W1*S(IX1,IY1,IZ1,K)+ &
+                                     W2*S(IX2,IY1,IZ1,K)+ &
+                                     W3*S(IX1,IY2,IZ1,K)+ &
+                                     W4*S(IX2,IY2,IZ1,K)+ &
+                                     W5*S(IX1,IY1,IZ2,K)+ &
+                                     W6*S(IX2,IY1,IZ2,K)+ &
+                                     W7*S(IX1,IY2,IZ2,K)+ &
+                                     W8*S(IX2,IY2,IZ2,K)  !
+                          ENDDO
 
-                  WRITE(7,FMT='(1PE10.3,1P2E11.3,0P15F10.5)')XTF,CXE,CXB,SVEC
-               ELSE
-                  WRITE(0,*)'ddpostprocess fatal error: NRFLDB=',NRFLDB
-                  STOP
-               ENDIF   ! endif(nrfldb=0 or 1)
+                          WRITE(7,FMT='(1PE10.3,1P2E11.3,0P15F10.5)')XTF,CXE,CXB,SVEC
+                       ELSE
+                          WRITE(0,*)'ddpostprocess fatal error: NRFLDB=',NRFLDB
+                          STOP
+                       ENDIF   ! endif(nrfldb=0 or 1)
 
+                    ENDDO
+                ENDDO
             ENDDO
          ELSE
             WRITE(0,FMT='(A,A)')'ddpostprocess fatal error: ',       &
@@ -521,11 +527,10 @@
       DO JZ=1,NZ
          VTRZ(JZ)=(JZ+X0(3))*DPHYS
       ENDDO
-
+      ! write coordinate
       CALL VTR_WRITE_MESH(FD=fd, X=VTRX, Y=VTRY, Z=VTRZ)
 
 ! electric field intensity or energy density
-
       DO JZ=1,NZ
          DO JY=1,NY
             DO JX=1,NX
@@ -552,6 +557,7 @@
          ENDDO
       ENDDO
 
+! write electric field
       IF(IVTR==1)THEN
          CALL VTR_WRITE_VAR(FD=fd,NAME="Intensity",FIELD=VTR8)
       ELSEIF(IVTR==2)THEN
