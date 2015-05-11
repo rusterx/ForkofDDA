@@ -19,7 +19,7 @@
 					<folderInfo id="photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222." name="/" resourcePath="">
 						<toolChain id="photran.managedbuild.toolchain.gnu.fortran.win32.exe.debug.107296014" name="GCC Fortran" superClass="photran.managedbuild.toolchain.gnu.fortran.win32.exe.debug">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="photran.managedbuild.target.gnu.platform.win32.exe.debug.2073856828" name="Debug Platform" osList="win32" superClass="photran.managedbuild.target.gnu.platform.win32.exe.debug"/>
-							<builder buildPath="${workspace_loc:/ddscat}/Debug" id="photran.managedbuild.target.gnu.builder.win32.exe.debug.1611891587" managedBuildOn="true" name="Gnu Make Builder.Debug" superClass="photran.managedbuild.target.gnu.builder.win32.exe.debug"/>
+							<builder buildPath="${workspace_loc:/ddscat}/Debug" id="photran.managedbuild.target.gnu.builder.win32.exe.debug.1611891587" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="photran.managedbuild.target.gnu.builder.win32.exe.debug"/>
 							<tool id="photran.managedbuild.tool.gnu.c.compiler.win32.exe.debug.1883866189" name="GCC C Compiler" superClass="photran.managedbuild.tool.gnu.c.compiler.win32.exe.debug">
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1681912473" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -85,9 +85,6 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="ddscat.photran.managedbuild.target.gnu.fortran.win32.exe.587442650" name="Executable (Gnu Fortran on Windows)" projectType="photran.managedbuild.target.gnu.fortran.win32.exe"/>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
@@ -100,5 +97,15 @@
 				<runAllBuilders>true</runAllBuilders>
 			</target>
 		</buildTargets>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222;photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222.;photran.managedbuild.tool.gnu.c.compiler.win32.exe.debug.1883866189;cdt.managedbuild.tool.gnu.c.compiler.input.1681912473">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222;photran.managedbuild.config.gnu.fortran.win32.exe.debug.1572421222.">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>
