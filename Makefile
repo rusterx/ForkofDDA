@@ -466,7 +466,6 @@ OBJS2 = CALLTARGET.o\
 # dependencies for ddpostprocess:
 
 OBJS3 =	DDPOSTPROCESS.o\
-	DDP.o\
 	readnf_bcom.o\
 	readnf_ecom.o\
 	readnf.o\
@@ -475,6 +474,12 @@ OBJS3 =	DDPOSTPROCESS.o\
 # dependencies for vtrconvert:
 
 OBJS4 = VTRCONVERT.o\
+	vtr.o
+	
+OBJS5 =	DDP.o\
+	readnf_bcom.o\
+	readnf_ecom.o\
+	readnf.o\
 	vtr.o
 
 all:	ddscat calltarget ddpostprocess ddp vtrconvert
@@ -501,14 +506,16 @@ ddpostprocess: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
 	$(FC) -o ddpostprocess \
 	$(OBJS3) $(LFLAGS) 
 
-# customized
-ddp: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
-	$(FC) -o ddp \
-	$(OBJS3) $(LFLAGS)
 
 vtrconvert: ddprecision.mod vtr.o $(OBJS4)
 	$(FC) -o vtrconvert \
 	$(OBJS4) $(LFLAGS)
+
+	
+# customized
+ddp: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS5)
+	$(FC) -o ddp \
+	$(OBJS5) $(LFLAGS)
 
 #--------------- modules ---------------------------------------------
 
