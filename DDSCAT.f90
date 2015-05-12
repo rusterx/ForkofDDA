@@ -733,8 +733,6 @@
                   THETMI,THETMX,THTMID,THTMXD,TOL,WAVE,XMAX,XMIN,XX,YMAX,     &
                   YMIN,ZMAX,ZMIN
 
-!! Custom VAR
-      REAL(WP) :: NXY,DPHYS
 ! Target Properties:
 ! AEFF=aeff=effective radius of target (physical units)
 ! PIA2=pi*(aeff/d)**2=pi*(3*NAT/4*pi)**(2/3)
@@ -1642,9 +1640,6 @@
          YMAX=REAL(IYMAX)+0.5_WP+X0(2)
          ZMIN=REAL(IZMIN)-0.5_WP+X0(3)
          ZMAX=REAL(IZMAX)+0.5_WP+X0(3)
-
-
-! write out infomation on console
          WRITE(CMSGNM,FMT='(A)')': dimensions of physical target'
          CALL WRIMSG('DDSCAT',CMSGNM)
          WRITE(CMSGNM,FMT='(2I6,A)')IXMIN,IXMAX,' = min, max values of JX'
@@ -1726,7 +1721,6 @@
 
          DAEFF=(4._WP*PI/(3._WP*REAL(NAT0,KIND=WP)))**(1._WP/3._WP)
 
-
 ! write out some information on target geometry
 ! following call to EXTEND, as a check
 
@@ -1770,11 +1764,6 @@
          CALL WRIMSG('DDSCAT',CMSGNM)
          WRITE(CMSGNM,FMT='(2F12.5,A)')ZMIN,ZMAX,' = min, max values of z/d'
          CALL WRIMSG('DDSCAT',CMSGNM)
-
-
-
-
-
 !***
 
 ! EXTEND reorders the occupied lattice sites,
@@ -2663,7 +2652,6 @@
 
             PIA2=PI*(.75_WP*NAT0/PI)**(2._WP/3._WP)
 
-
 ! Initialize various sums over target orientation.
 
             DO JO=1,IORTH
@@ -2966,8 +2954,6 @@
                                  QSCAG2,QTRQAB,QTRQSC,SCRRS1,SCRRS2,SHPAR,    &
                                  TOL,TIMERS,MXTIMERS,NTIMERS,NLAR)
 
-
-
 !*** diagnostic
 !			write(0,*)'DDSCAT ckpt 22'
 !***
@@ -3177,7 +3163,6 @@
 ! MPI environment shutdown:
 
       CALL MPI_FINALIZE(IERR)
-
 
 !------------------------------------------------------------------------
 ! 2012.04.22 (BTD) change deallocation of ISCR1

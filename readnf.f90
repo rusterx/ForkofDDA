@@ -168,6 +168,8 @@
 !***
          READ(IOBIN)NRWORD_NF,NRFLDB,NXYZ,NAT0,NAT3,NCOMP,NX,NY,NZ,X0,AEFF, &
                     NAMBIENT,WAVE,AK_TF,CXE0_TF,CXB0_TF
+
+
 !*** diagnostic
 !         write(0,*)'readnf ckpt 6, nrword_nf=',nrword_nf
 !***
@@ -265,7 +267,6 @@
       YMAX=(X0(2)+NY+0.5001)*DPHYS
       ZMIN=(X0(3)+1.-0.5001)*DPHYS
       ZMAX=(X0(3)+NZ+0.5001)*DPHYS
-
 
 !*** diagnostic
 !      write(0,*)'readnf ckpt 16'
