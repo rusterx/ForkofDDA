@@ -734,7 +734,7 @@
                   YMIN,ZMAX,ZMIN
 
 !! Custom VAR
-      REAL(WP) ::　NXY,DPHYS
+      REAL(WP) :: NXY,DPHYS
 ! Target Properties:
 ! AEFF=aeff=effective radius of target (physical units)
 ! PIA2=pi*(aeff/d)**2=pi*(3*NAT/4*pi)**(2/3)
@@ -2965,25 +2965,6 @@
                                  PIA2,QABS,QBKSCA,QEXT,QPHA,QSCAT,QSCAG,      &
                                  QSCAG2,QTRQAB,QTRQSC,SCRRS1,SCRRS2,SHPAR,    &
                                  TOL,TIMERS,MXTIMERS,NTIMERS,NLAR)
-
-
-!! custome contend
-                                 DPHYS=AEFF*(4._WP*PI/(3._WP*NAT0))**(1._WP/3._WP)
-                                 NXY=NX*NY
-                                 XMIN=(X0(1)+1.-0.5001)*DPHYS
-                                 XMAX=(X0(1)+NX+0.5001)*DPHYS
-                                 YMIN=(X0(2)+1.-0.5001)*DPHYS
-                                 YMAX=(X0(2)+NY+0.5001)*DPHYS
-                                 ZMIN=(X0(3)+1.-0.5001)*DPHYS
-                                 ZMAX=(X0(3)+NZ+0.5001)*DPHYS
-
-                                 OPEN(UNIT=118,FILE='ddpostprocess.par')
-                                 write(118,FMT='(A)'),"'w000r000k000.E1'            = name of file with E stored"
-                                 write(118,FMT='(A)'),"'VTRoutput'                  = prefix for name of VTR output files"
-                                 write(118,FMT='(A)'),"0   = IVTR (set to 1 to create VTR output)"
-                                 write(118,FMT='(A)'),"1   = ILINE (set to 1 to evaluate E along a line)"
-                                 write(118,FMT='(F8.3,5F9.3,A)'),XMIN,YMIN,REAL(0),XMAX,YMAX,REAL(0)," 200 200 1  = XA,YA,ZA,XB,YB,ZB,NAA,NAB,NAC"
-                                 write(118,FMT='(F8.3,5F9.3,A)'),XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX,' = geometry of target'
 
 
 
