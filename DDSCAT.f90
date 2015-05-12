@@ -1640,6 +1640,9 @@
          YMAX=REAL(IYMAX)+0.5_WP+X0(2)
          ZMIN=REAL(IZMIN)-0.5_WP+X0(3)
          ZMAX=REAL(IZMAX)+0.5_WP+X0(3)
+
+
+! write out infomation on console
          WRITE(CMSGNM,FMT='(A)')': dimensions of physical target'
          CALL WRIMSG('DDSCAT',CMSGNM)
          WRITE(CMSGNM,FMT='(2I6,A)')IXMIN,IXMAX,' = min, max values of JX'
@@ -1721,6 +1724,7 @@
 
          DAEFF=(4._WP*PI/(3._WP*REAL(NAT0,KIND=WP)))**(1._WP/3._WP)
 
+
 ! write out some information on target geometry
 ! following call to EXTEND, as a check
 
@@ -1764,6 +1768,11 @@
          CALL WRIMSG('DDSCAT',CMSGNM)
          WRITE(CMSGNM,FMT='(2F12.5,A)')ZMIN,ZMAX,' = min, max values of z/d'
          CALL WRIMSG('DDSCAT',CMSGNM)
+
+
+
+
+
 !***
 
 ! EXTEND reorders the occupied lattice sites,
@@ -2652,6 +2661,7 @@
 
             PIA2=PI*(.75_WP*NAT0/PI)**(2._WP/3._WP)
 
+
 ! Initialize various sums over target orientation.
 
             DO JO=1,IORTH
@@ -2954,6 +2964,28 @@
                                  QSCAG2,QTRQAB,QTRQSC,SCRRS1,SCRRS2,SHPAR,    &
                                  TOL,TIMERS,MXTIMERS,NTIMERS,NLAR)
 
+
+!! custome contend
+             AEFF=1/DAEFF
+             DPHYS=AEFF*(4._WP*PI/(3._WP*NAT0))**(1._WP/3._WP)
+             NXY=NX*NY
+             XMIN=(X0(1)+1.-0.5001)*DPHYS
+             XMAX=(X0(1)+NX+0.5001)*DPHYS
+             YMIN=(X0(2)+1.-0.5001)*DPHYS
+             YMAX=(X0(2)+NY+0.5001)*DPHYS
+             ZMIN=(X0(3)+1.-0.5001)*DPHYS
+             ZMAX=(X0(3)+NZ+0.5001)*DPHYS
+
+             OPEN(UNIT=118,FILE='ddpostprocess.par')
+             write(118,FMT='(A)'),"'w000r000k000.E1'            = name of file with E stored"
+             write(118,FMT='(A)'),"'VTRoutput'                  = prefix for name of VTR output files"
+             write(118,FMT='(A)'),"0   = IVTR (set to 1 to create VTR output)"
+             write(118,FMT='(A)'),"1   = ILINE (set to 1 to evaluate E along a line)"
+             write(118,FMT='(F8.3,5F9.3,A)'),XMIN,YMIN,REAL(0),XMAX,YMAX,REAL(0)," 200 200 1  = XA,YA,ZA,XB,YB,ZB,NAA,NAB,NAC"
+             write(118,FMT='(F8.3,5F9.3,A)'),XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX,' = geometry of target'
+
+
+
 !*** diagnostic
 !			write(0,*)'DDSCAT ckpt 22'
 !***
@@ -3163,6 +3195,7 @@
 ! MPI environment shutdown:
 
       CALL MPI_FINALIZE(IERR)
+
 
 !------------------------------------------------------------------------
 ! 2012.04.22 (BTD) change deallocation of ISCR1

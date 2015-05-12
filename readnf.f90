@@ -266,6 +266,7 @@
       ZMIN=(X0(3)+1.-0.5001)*DPHYS
       ZMAX=(X0(3)+NZ+0.5001)*DPHYS
 
+
 !*** diagnostic
 !      write(0,*)'readnf ckpt 16'
 !      write(0,*)'dphys=',dphys
