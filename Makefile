@@ -304,6 +304,12 @@ DDPOSTPROCESS.o: DDPOSTPROCESS.f90 ddprecision.mod readnf_bcom.mod \
 	$(FC) -c $(FFLAGS) $(OPENMP) DDPOSTPROCESS.f90 \
 	-o DDPOSTPROCESS.o
 
+##
+GETPAR.o: GETPAR.f90 ddprecision.mod readnf_bcom.mod \
+	readnf_ecom.mod vtr.mod
+	$(FC) -c $(FFLAGS) $(OPENMP) GETPAR.f90 \
+	-o GETPAR.o
+
 bself.o: bself.f90 ddprecision.mod
 	cpp -P -traditional-cpp $(DOMP) bself.f90 bself_cpp.f90
 	$(FC) -c $(FFLAGS) $(OPENMP) bself_cpp.f90 -o bself.o
@@ -471,7 +477,15 @@ OBJS3 =	DDPOSTPROCESS.o\
 OBJS4 = VTRCONVERT.o\
 	vtr.o
 
-all:	ddscat calltarget ddpostprocess vtrconvert
+	
+##
+OBJS5 =	GETPAR.o\
+	readnf_bcom.o\
+	readnf_ecom.o\
+	readnf.o\
+	vtr.o
+
+all:	ddscat calltarget ddpostprocess vtrconvert getpar
 
 ddscat:	ddprecision.mod ddcommon_1.mod $(MKLM) $(OBJS)
 	@echo 'LOADEDMODULES='$(LOADEDMODULES)
@@ -494,6 +508,11 @@ calltarget: ddprecision.mod ddcommon_1.mod $(OBJS2)
 ddpostprocess: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
 	$(FC) -o ddpostprocess \
 	$(OBJS3) $(LFLAGS) 
+
+##
+getpar: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS5)
+	$(FC) -o getpar \
+	$(OBJS5) $(LFLAGS) 
 
 vtrconvert: ddprecision.mod vtr.o $(OBJS4)
 	$(FC) -o vtrconvert \
