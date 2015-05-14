@@ -291,7 +291,9 @@ LFLAGS	 	=  -static-libgcc -static-libgfortran
 
 # special cases:
 
-DDSCAT.o: DDSCAT.f90 ddprecision.mod ddcommon_1.mod cgmodule.mod
+DDSCAT.o: DDSCAT.f90 ddprecision.mod ddcommon_1.mod cgmodule.mod \
+	readnf_bcom.mod readnf_ecom.mod vtr.mod
+#   readnf_bcom.mod readnf_ecom.mod vtr.mod added for getpar.o
 	cpp -P -traditional-cpp $(DMPI) $(DOMP) DDSCAT.f90 DDSCAT_cpp.f90
 	$(FC) -c $(FFLAGS) $(OPENMP) DDSCAT_cpp.f90 -o DDSCAT.o
 	rm DDSCAT_cpp.f90
@@ -303,12 +305,6 @@ DDPOSTPROCESS.o: DDPOSTPROCESS.f90 ddprecision.mod readnf_bcom.mod \
 	readnf_ecom.mod vtr.mod
 	$(FC) -c $(FFLAGS) $(OPENMP) DDPOSTPROCESS.f90 \
 	-o DDPOSTPROCESS.o
-
-##
-GETPAR.o: GETPAR.f90 ddprecision.mod readnf_bcom.mod \
-	readnf_ecom.mod vtr.mod
-	$(FC) -c $(FFLAGS) $(OPENMP) GETPAR.f90 \
-	-o GETPAR.o
 
 bself.o: bself.f90 ddprecision.mod
 	cpp -P -traditional-cpp $(DOMP) bself.f90 bself_cpp.f90
@@ -337,6 +333,15 @@ scat.o: scat.f90 ddprecision.mod ddcommon_1.mod
 readnf.o: readnf.f90 ddprecision.mod readnf_bcom.mod readnf_ecom.mod
 	$(FC) -c $(FFLAGS) $(OPENMP) readnf.f90 \
 	-o readnf.o
+	
+##
+getpar.o: getpar.f90 ddprecision.mod readnf_bcom.mod readnf_ecom.mod
+	$(FC) -c $(FFLAGS) $(OPENMP) getpar.f90 \
+	-o getpar.o
+
+
+
+
 
 # dependencies for ddscat:
 OBJS =  DDSCAT.o\
@@ -425,7 +430,11 @@ OBJS =  DDSCAT.o\
 	writefml.o\
 	writepol.o\
 	writesca.o\
-	zbcg2wp.o
+	zbcg2wp.o\
+	readnf_bcom.o\
+	readnf_ecom.o\
+	readnf.o\
+	getpar.o\
 
 # dependencies for calltarget:
 
@@ -478,16 +487,11 @@ OBJS4 = VTRCONVERT.o\
 	vtr.o
 
 	
-##
-OBJS5 =	GETPAR.o\
-	readnf_bcom.o\
-	readnf_ecom.o\
-	readnf.o\
-	vtr.o
 
-all:	ddscat calltarget ddpostprocess vtrconvert getpar
+all:	ddscat calltarget ddpostprocess vtrconvert
 
-ddscat:	ddprecision.mod ddcommon_1.mod $(MKLM) $(OBJS)
+ddscat:	ddprecision.mod ddcommon_1.mod ddprecision.mod readnf_bcom.mod \
+	readnf_ecom.mod $(MKLM) $(OBJS)
 	@echo 'LOADEDMODULES='$(LOADEDMODULES)
 	@echo 'LOADEDMODULES_modshare='$(LOADEDMODULES_modshare)
 	@echo 'LD_LIBRARY_PATH='$(LD_LIBRARY_PATH)
@@ -509,10 +513,6 @@ ddpostprocess: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS3)
 	$(FC) -o ddpostprocess \
 	$(OBJS3) $(LFLAGS) 
 
-##
-getpar: ddprecision.mod readnf_bcom.mod readnf_ecom.mod vtr.mod $(OBJS5)
-	$(FC) -o getpar \
-	$(OBJS5) $(LFLAGS) 
 
 vtrconvert: ddprecision.mod vtr.o $(OBJS4)
 	$(FC) -o vtrconvert \

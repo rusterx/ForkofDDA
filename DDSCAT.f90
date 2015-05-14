@@ -63,7 +63,13 @@
          WRITE(CMSGNM,FMT='(A)')                           &
             'normal termination after nearfield calculation'
          CALL WRIMSG('DDSCAT',CMSGNM)
- 
+
+!! automatic create ddpostprocess.par
+         CALL GETPAR()
+         WRITE(CMSGNM,FMT='(A)')                           &
+            'ddpostprocess.par create sucessfully.'
+         CALL WRIMSG('DDSCAT',CMSGNM)
+
       ENDIF
       STOP
     END PROGRAM MAIN
