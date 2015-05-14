@@ -1,13 +1,10 @@
 program GETPAR
     USE DDPRECISION,ONLY: WP
 
-    ! modules used to transfer allocatable variables:
 
     USE READNF_ECOM,ONLY: CXADIA,CXEINC,CXEPS,CXESCA,CXPOL,ICOMP
     USE READNF_BCOM,ONLY: CXBINC,CXBSCA
     IMPLICIT NONE
-
-    ! arguments
 
     CHARACTER*60 :: CFLENAME
     CHARACTER*26 :: CSTAMP
@@ -76,32 +73,16 @@ program GETPAR
         INIT=.TRUE.
     ENDIF
 
-!              >>>>> Important Note! <<<<<
-! The structure of the READ statements below *must* conform to the
-! structure of the corresponding WRITE statements in nearfield.f90
-! Any changes must be made in both modules.
 
     IOBIN=17
     CFLENAME='w000r000k000.E1'
+
     OPEN(UNIT=IOBIN,FILE=CFLENAME,ACCESS='STREAM')
-!*** diagnostic
-!      write(0,*)'readnf ckpt 3'
-!***
     READ(IOBIN)CSTAMP,VERSNUM
-    WRITE(IDVOUT,FMT='(2A)')'>READNF data from ',CSTAMP
-!*** diagnostic
-!      write(0,*)'readnf ckpt 4, cstamp=',cstamp
-!      write(0,*)'              versnum=',versnum
-!***
+
     IF(VERSNUM.EQ.730)THEN
-!*** diagnostic
-!         write(0,*)'readnf ckpt 5, about to read file'
-!***
         READ(IOBIN)NRWORD_NF,NRFLDB,NXYZ,NAT0,NAT3,NCOMP,NX,NY,NZ,X0,AEFF, &
                 NAMBIENT,WAVE,AK_TF,CXE0_TF,CXB0_TF
-!*** diagnostic
-!         write(0,*)'readnf ckpt 6, nrword_nf=',nrword_nf
-!***
     ELSE
         WRITE(0,FMT='(3A,I4)')'file=',CFLENAME,                 &
                             ' was written by version=',VERSNUM
@@ -109,39 +90,9 @@ program GETPAR
                          'subroutine SUBREADNF'                           !
         STOP
     ENDIF
-    IF(NRWORD_NF.NE.NRWORD)THEN
-        WRITE(0,*)'READNF fatal error:'
-        WRITE(0,*)'  word length=',NRWORD_NF,' in file',CFLENAME
-        WRITE(0,*)'  word length=',NRWORD,' in subroutine READNF'
-        STOP
-    ENDIF
-!*** diagnostic
-!      write(0,*)'readnf ckpt 7, begin allocation'
-!***
-    ALLOCATE(CXEPS(1:NCOMP))
-    ALLOCATE(ICOMP(1:NX,1:NY,1:NZ,1:3))
-    ALLOCATE(CXPOL(1:NX,1:NY,1:NZ,1:3))
-    ALLOCATE(CXESCA(1:NX,1:NY,1:NZ,1:3))
-    ALLOCATE(CXEINC(1:NX,1:NY,1:NZ,1:3))
-    ALLOCATE(CXADIA(1:NX,1:NY,1:NZ,1:3))
-!*** diagnostic
-!      write(0,*)'readnf ckpt 8, end allocation, begin reading arrays'
-!***
-    READ(IOBIN)CXEPS
-!*** diagnostic
-!      write(0,*)'readnf ckpt 9, have read cxeps'
-!***
-    READ(IOBIN)ICOMP
-    READ(IOBIN)CXPOL
-    READ(IOBIN)CXESCA
-    READ(IOBIN)CXADIA
-    IF(NRFLDB==1)THEN
-        ALLOCATE(CXBINC(1:NX,1:NY,1:NZ,1:3))
-        ALLOCATE(CXBSCA(1:NX,1:NY,1:NZ,1:3))
-        READ(IOBIN)CXBSCA
-    ENDIF
     CLOSE(IOBIN)
 
+!!  caculate data
     DPHYS=AEFF*(4._WP*PI/(3._WP*NAT0))**(1._WP/3._WP)
     NXY=NX*NY
     XMIN=(X0(1)+1.-0.5001)*DPHYS
@@ -151,6 +102,7 @@ program GETPAR
     ZMIN=(X0(3)+1.-0.5001)*DPHYS
     ZMAX=(X0(3)+NZ+0.5001)*DPHYS
 
+!!  write ddpostprocess.par
     DDP=118
     OPEN(UNIT=DDP,FILE='ddpostprocess.par')
     WRITE(DDP,FMT='(A)'),"'w000r000k000.E1'            = name of file with E stored"
