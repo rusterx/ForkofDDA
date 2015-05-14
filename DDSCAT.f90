@@ -66,10 +66,6 @@
 
 !! automatic create ddpostprocess.par
          CALL GETPAR()
-         WRITE(CMSGNM,FMT='(A)')                           &
-            'ddpostprocess.par create sucessfully.'
-         CALL WRIMSG('DDSCAT',CMSGNM)
-
       ENDIF
       STOP
     END PROGRAM MAIN
