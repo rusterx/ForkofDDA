@@ -342,12 +342,14 @@
                   'Re(B_y)','Im(B_y)','Re(B_z)','Im(B_z)',            &
                   '-- <(Sx,Sy,Sz)>/|<S_inc>| --'                      !
             ENDIF
+
+!! custom data,some change
             DO JA=1,NAA
                 DO JB=1,NAB
                     DO JC=1,NAC
                        ZETA=REAL(JA-1)/REAL(NAA)
-                       ZETB=REAL(JB-1)/REAL(NAB)
-                       ZETC=REAL(JC-1)/REAL(NAC)
+                       ZETC=REAL(JB-1)/REAL(NAB)
+                       ZETB=REAL(JC-1)/REAL(NAC)
                        XTF(1)=XA+(XB-XA)*ZETA
                        XTF(2)=YA+(YB-YA)*ZETB
                        XTF(3)=ZA+(ZB-ZA)*ZETC
