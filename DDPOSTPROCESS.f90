@@ -348,8 +348,8 @@
                 DO JB=1,NAB
                     DO JC=1,NAC
                        ZETA=REAL(JA-1)/REAL(NAA)
-                       ZETC=REAL(JB-1)/REAL(NAB)
-                       ZETB=REAL(JC-1)/REAL(NAC)
+                       ZETB=REAL(JB-1)/REAL(NAB)
+                       ZETC=REAL(JC-1)/REAL(NAC)
                        XTF(1)=XA+(XB-XA)*ZETA
                        XTF(2)=YA+(YB-YA)*ZETB
                        XTF(3)=ZA+(ZB-ZA)*ZETC
