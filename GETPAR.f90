@@ -159,7 +159,7 @@ program GETPAR
 !!  test wether
     NARGIN = iargc()
     IF(nargin<=0 .OR. nargin>1)THEN
-        WRITE(IDVOUT,FMT='(A)')'fatal error: the size of parameters should equal 1'
+        WRITE(IDVOUT,FMT='(A)')'getpar fatal error: the size of parameters should equal 1'
         STOP
     ELSEIF(nargin==1)THEN
         CALL getarg(1,FLAG)
@@ -190,7 +190,7 @@ program GETPAR
     ENDIF
 
     CLOSE(DDP)
-    WRITE(IDVOUT,FMT='(A,A)'),'CREATE ddpostprocess.par successfully with getpar of ',FLAG
+    WRITE(IDVOUT,FMT='(A,A)'),'>GETPAR create ddpostprocess.par successfully with getpar of ',FLAG
 
 
 
