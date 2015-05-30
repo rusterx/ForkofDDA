@@ -156,11 +156,14 @@ program GETPAR
     ZMIN=(X0(3)+1.-0.5001)*DPHYS
     ZMAX=(X0(3)+NZ+0.5001)*DPHYS
 
+!!  test wether
     NARGIN = iargc()
-    IF(nargin<=1 .OR. nargin>2)THEN
-        FLAG = 'y'
+    IF(nargin<=0 .OR. nargin>1)THEN
+        WRITE(IDVOUT,FMT='(A)')'fatal error: the size of parameters should equal 1'
+        STOP
+    ELSEIF(nargin==1)THEN
+        CALL getarg(1,FLAG)
     ENDIF
-    CALL getarg(1,FLAG)
 
     DDP=118
     OPEN(UNIT=DDP,FILE='ddpostprocess.par')
@@ -187,10 +190,11 @@ program GETPAR
     ENDIF
 
     CLOSE(DDP)
+    WRITE(IDVOUT,FMT='(A,A)'),'CREATE ddpostprocess.par successfully with getpar of ',FLAG
 
 
 
-1080 FORMAT(F2.1,2F9.5,F3.1,2F8.5,' 1 200 200 = XMIN(',F8.5,'),YMIN(',F8.5&
+1080 FORMAT(F3.1,2F9.5,F4.1,2F8.5,' 1 200 200 = XMIN(',F8.5,'),YMIN(',F8.5&
     '),ZMIN(',F8.5,'),XMAX(',F7.5,'),YMAX(',F7.5,'),ZMAX(',F7.5,'),NAA,NAB,NAC')
 
 1081 FORMAT(F8.5,F4.1,F9.5,F8.5,F4.1,F8.5,' 200 1 200 = XMIN(',F8.5,'),YMIN(',F8.5&
