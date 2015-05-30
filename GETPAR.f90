@@ -11,8 +11,13 @@ program GETPAR
 
     CHARACTER*60 :: CFLENAME
     CHARACTER*26 :: CSTAMP
+    !!
+    CHARACTER*20 :: FLAG
 
     INTEGER :: IDVOUT,NAT0,NCOMP,NRFLDB,NX,NY,NZ,VERSNUM
+    !!
+    INTEGER :: NARGIN
+
 
     REAL(WP) ::                                             &
      AEFF,DPHYS,NAMBIENT,WAVE,XMAX,XMIN,YMAX,YMIN,ZMAX,ZMIN
@@ -151,17 +156,47 @@ program GETPAR
     ZMIN=(X0(3)+1.-0.5001)*DPHYS
     ZMAX=(X0(3)+NZ+0.5001)*DPHYS
 
+    NARGIN = iargc()
+    IF(nargin<=1 .OR. nargin>2)THEN
+        FLAG = 'y'
+    ENDIF
+    CALL getarg(1,FLAG)
+
     DDP=118
     OPEN(UNIT=DDP,FILE='ddpostprocess.par')
-    WRITE(DDP,FMT='(A)'),"'w000r000k000.E1'            = name of file with E stored"
-    WRITE(DDP,FMT='(A)'),"'VTRoutput'                  = prefix for name of VTR output files"
+    WRITE(DDP,FMT='(A)'),&
+    "'w000r000k000.E1'            = name of file with E stored"
+    WRITE(DDP,FMT='(A)'),&
+    "'VTRoutput'                  = prefix for name of VTR output files"
     WRITE(DDP,FMT='(A)'),"0   = IVTR (set to 1 to create VTR output)"
     WRITE(DDP,FMT='(A)'),"1   = ILINE (set to 1 to evaluate E along a line)"
-    WRITE(DDP,FMT=1080),XMIN,YMIN,REAL(0),XMAX,YMAX,REAL(0),&
-    ' 200 200 1 = XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX,NAA,NAB,NAC'
-    WRITE(DDP,FMT=1081),XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX
+
+    IF(FLAG=='x')THEN
+        WRITE(DDP,FMT=1080),REAL(0),YMIN,ZMIN,REAL(0),YMAX,ZMAX,&
+        XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX
+    ENDIF
+
+    IF(FLAG=='y')THEN
+        WRITE(DDP,FMT=1081),XMIN,REAL(0),ZMIN,XMAX,REAL(0),ZMAX,&
+        XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX
+    ENDIF
+
+    IF(FLAG=='z')THEN
+        WRITE(DDP,FMT=1082),XMIN,YMIN,REAL(0),XMAX,YMAX,REAL(0),&
+        XMIN,YMIN,ZMIN,XMAX,YMAX,ZMAX
+    ENDIF
+
     CLOSE(DDP)
 
-1080 FORMAT(F8.5,F9.5,F4.1,2F8.5,F4.1,A)
-1081 FORMAT(F8.5,2F9.5,3F9.5)
+
+
+1080 FORMAT(F2.1,2F9.5,F3.1,2F8.5,' 1 200 200 = XMIN(',F8.5,'),YMIN(',F8.5&
+    '),ZMIN(',F8.5,'),XMAX(',F7.5,'),YMAX(',F7.5,'),ZMAX(',F7.5,'),NAA,NAB,NAC')
+
+1081 FORMAT(F8.5,F4.1,F9.5,F8.5,F4.1,F8.5,' 200 1 200 = XMIN(',F8.5,'),YMIN(',F8.5&
+    '),ZMIN(',F8.5,'),XMAX(',F7.5,'),YMAX(',F7.5,'),ZMAX(',F7.5,'),NAA,NAB,NAC')
+
+1082 FORMAT(F8.5,F9.5,F4.1,2F8.5,F4.1,' 200 200 1 = XMIN(',F8.5,'),YMIN(',F8.5&
+    '),ZMIN(',F8.5,'),XMAX(',F7.5,'),YMAX(',F7.5,'),ZMAX(',F7.5,'),NAA,NAB,NAC')
+
 end program GETPAR
