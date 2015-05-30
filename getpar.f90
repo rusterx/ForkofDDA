@@ -120,6 +120,8 @@ SUBROUTINE GETPAR()
 
     DPHYS=AEFF*(4._WP*PI/(3._WP*NAT0))**(1._WP/3._WP)
     NXY=NX*NY
+
+!   shrink the volume of field
     XMIN=(X0(1)+1.-0.5001)*DPHYS+0.00001
     XMAX=(X0(1)+NX+0.5001)*DPHYS-0.00001
     YMIN=(X0(2)+1.-0.5001)*DPHYS+0.00001
